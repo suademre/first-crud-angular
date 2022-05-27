@@ -1,0 +1,88 @@
+<div>
+  <h1>
+    Welcome to {{ title }}!
+  </h1>
+</div>
+<div class="input-group mb-5">
+  <input
+    #inputItem
+    type="text"
+    class="form-control"
+    placeholder="new todo"
+    value="{{textValue}}"
+    aria-label="new todo"
+    aria-describedby="basic-addon2"
+  />
+  <div class="input-group-append">
+    <button
+      *ngIf="!updateItem; else updateButton"
+      class="input-group-text"
+      id="basic-addon2"
+      (click)="addItems(inputItem.value)"
+    >
+      Add ToDo
+    </button>
+    <ng-template #updateButton>
+      <button
+        class="input-group-text"
+        id="basic-addon2"
+        (click)="addItems(inputItem.value)"
+      >
+        Update
+      </button>
+    </ng-template>
+  </div>
+</div>
+
+<div class="form-check mb-3">
+  <input
+    type="checkbox"
+    [(ngModel)]="showAll"
+    class="form-check-input"
+    name=""
+    id="displayAll"
+  />
+  <label for="showAll" class="form-check-label" *ngIf="showAll; else elseBlock"
+    >Show uncomplietet({{itemLengt}} items)</label
+  >
+  <ng-template #elseBlock>
+    <label for="showAll" class="form-check-label"
+      >Show All({{items.length}} items)</label
+    >
+  </ng-template>
+</div>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Description</th>
+      <th scope="col">Action</th>
+      <th scope="col">Stuation</th>
+    </tr>
+  </thead>
+  <tbody class="table-group-divider">
+    <tr *ngFor="let item of getItems(), index as i">
+      <th scope="row">{{i+1}}</th>
+      <td scope="row">{{item.description}}</td>
+      <td *ngIf="item.action; else elseBlock">Yes</td>
+      <ng-template #elseBlock><td>No</td></ng-template>
+
+      <td>
+        <input type="checkbox" [(ngModel)]="item.action" name="" id="" />
+        <button
+          (click)="deleteItems(item.id)"
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+        ></button>
+        <button
+          type="button"
+          (click)="updateItems(item.id)"
+          class="btn btn-warning"
+        >
+          Update
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
